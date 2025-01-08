@@ -1,0 +1,15 @@
+django
+django-restframework
+drf-yasg
+
+
+python-dotenv
+django-extensions
+sendgrid-django
+django-sendgrid-v5
+django-crispy-forms 
+crispy-bootstrap5 
+crispy-bootstrap4
+django-filter
+pillow
+django-ckeditor

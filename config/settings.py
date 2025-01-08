@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv  # type: ignore
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,14 +36,29 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "blog",
+   
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Other apps
+     "blog",
+     "users",
+     "sendgrid_backend",
+    'crispy_forms',
+    'crispy_bootstrap5',  # For Bootstrap 5
+    'crispy_bootstrap4', 
 ]
+# Crispy forms
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5", "bootstrap4"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"  # Set this as the default; you can switch to "bootstrap4" if needed.
+
+
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -122,3 +142,40 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# Email settings for SendGrid
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+# Optional: For debugging purposes in development
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False  # Set to True if you're testing without sending emails
+
+# Optional: To track email status (useful for production)
+SENDGRID_TRACK_EMAIL_OPENS = True
+
+# Set default email address for sending
+DEFAULT_FROM_EMAIL = 'checheomenife@gmail.com'
+
+
+
+# Login redirect 
+LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = '/users/login/'
+
+
+#logger
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
+

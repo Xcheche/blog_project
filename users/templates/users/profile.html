@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% load crispy_forms_tags %} {% block content %}
+<div class="content-section">
+  <div class="media">
+    <img
+      class="rounded-circle account-img"
+      src="{{ user.profile.avatar.url }}"
+      alt="User Avatar"
+    />
+    <div class="media-body">
+      <h2 class="account-heading">{{ user.username }}</h2>
+      <p class="text-secondary">
+        Email: {{ user.profile.email|default:"Email not provided" }}
+      </p>
+      <p class="text-secondary">
+        Phone: {{ user.profile.phone|default:"Not provided" }}
+      </p>
+      <p class="text-secondary">
+        Bio: {{ user.profile.bio|default:"No bio available" }}
+      </p>
+      <p class="text-secondary">
+        Location: {{ user.profile.location|default:"Not specified" }}
+      </p>
+      <p class="text-secondary">
+        Birth Date: {{ user.profile.birth_date|date:"F j Y"}}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

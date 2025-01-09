@@ -4,13 +4,14 @@ from django.contrib import messages  # type: ignore
 
 # type: ignore
 from django.core.mail import send_mail  # type: ignore
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy  # type: ignore
 from django.views import generic  # type: ignore
 
 from config import settings
 
 from .forms import SignUpForm
+from .models import Profile
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ class SignUp(generic.CreateView):
         logger.info(f"Sending email to: {email}")
         try:
             send_mail(
-                subject='Welcome to Hall of Fame',
+                subject='Welcome to Cheche\'s Blog!',
                 message='Thank you for signing up.',
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[form.cleaned_data['email']],
@@ -38,6 +39,9 @@ class SignUp(generic.CreateView):
             messages.error(self.request, "Signup successful, but email sending failed.")
         return super().form_valid(form)
     
-    
 def profile(request):
-    return render(request, 'users/profile.html')
+    profile = Profile.objects.all()
+    context = {
+        'profile': profile
+    }
+    return render(request, 'users/profile.html', context)

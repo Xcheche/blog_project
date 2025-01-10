@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from PIL import Image
 
 
 # Create your models here.
@@ -10,7 +11,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    avatar = models.ImageField(default="default.jpg",upload_to='avatars/', blank=True)
+    image = models.ImageField(default="default.jpg",upload_to='images/', blank=True)
     
     
     
@@ -21,3 +22,16 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'Profile'
         verbose_name_plural = 'Profiles'
+        
+        
+# Resizing Image automatically
+    
+    def save(self):
+        super().save()
+
+        img = Image.open(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)

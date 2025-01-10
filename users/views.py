@@ -1,16 +1,17 @@
 import logging
 
 from django.contrib import messages  # type: ignore
+from django.contrib.auth.decorators import login_required
 
 # type: ignore
 from django.core.mail import send_mail  # type: ignore
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy  # type: ignore
 from django.views import generic  # type: ignore
 
 from config import settings
 
-from .forms import SignUpForm
+from .forms import ProfileUpdateForm, SignUpForm, UserUpdateForm
 from .models import Profile
 
 logger = logging.getLogger(__name__)
@@ -39,9 +40,36 @@ class SignUp(generic.CreateView):
             messages.error(self.request, "Signup successful, but email sending failed.")
         return super().form_valid(form)
     
+    
+    
+# @login_required 
+# def profile(request):
+#     profile = Profile.objects.all()
+#     context = {
+#         'profile': profile
+#     }
+#     return render(request, 'users/profile.html', context)
+
+@login_required
 def profile(request):
-    profile = Profile.objects.all()
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,
+                                   request.FILES,
+                                   instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Your account has been updated!')
+            return redirect('profile')
+
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
     context = {
-        'profile': profile
+        'u_form': u_form,
+        'p_form': p_form
     }
+
     return render(request, 'users/profile.html', context)

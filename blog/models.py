@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
-
+from django.urls import reverse
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
@@ -16,3 +16,8 @@ class Post(models.Model):
         ordering = ['-date_posted']
         verbose_name_plural = "Posts"
         
+        
+    # get absolute url
+    
+    def get_absolute_url(self):
+        return reverse("blog:post_detail", kwargs={"pk": self.pk}) # Used for detail view

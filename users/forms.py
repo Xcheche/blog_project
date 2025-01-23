@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import Profile
 
 
+# Form for extending signup
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
     forms.EmailField(required=True)
@@ -18,15 +19,28 @@ class SignUpForm(UserCreationForm):
             raise forms.ValidationError("This email address is already in use.")
         return email
 
+# Form for Updating user model
+# class UserUpdateForm(forms.ModelForm):
+    
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email']
+
+# # Form for Updating User Profile
+# class ProfileUpdateForm(forms.ModelForm):
+#     class Meta:
+#         model = Profile
+#         fields = ['phone', 'bio', 'location', 'birth_date', 'image']
 
 class UserUpdateForm(forms.ModelForm):
-    
+    # email = forms.EmailField()
+
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username']
 
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone', 'bio', 'location', 'birth_date', 'image']
+        fields = ['phone', 'bio', 'location', 'birth_date', 'image','email']

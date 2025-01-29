@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',  # For Bootstrap 5
     'crispy_bootstrap4', 
+    'captcha',
 ]
 # Crispy forms
 

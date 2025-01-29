@@ -13,3 +13,4 @@ crispy-bootstrap4
 django-filter
 pillow
 django-ckeditor
+django-simple-captcha

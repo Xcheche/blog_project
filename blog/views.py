@@ -4,6 +4,9 @@ from .models import Post
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin , UserPassesTestMixin
 from django.contrib.auth.models import User
+#Calendar
+import calendar
+from datetime import datetime
 
 
 # Create your views here.
@@ -109,3 +112,16 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+
+
+
+
+#Calendar
+
+
+
+def calendar_view(request):
+    year = datetime.now().year
+    month = datetime.now().month
+    cal = calendar.HTMLCalendar().formatmonth(year, month)
+    return render(request, 'calendar.html', {'calendar': cal})

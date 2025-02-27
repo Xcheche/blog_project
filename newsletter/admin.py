@@ -9,3 +9,6 @@ class NewsletterAdmin(admin.ModelAdmin):
     search_fields = ('email',)
     ordering = ('-date_added',)
     date_hierarchy = 'date_added'
+    
+    
+admin.site.register(Newsletter, NewsletterAdmin)   

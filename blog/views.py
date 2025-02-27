@@ -115,6 +115,9 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
 
 
+def latest_post(request):
+    posts = Post.objects.all().order_by('-date_posted')[:3]
+    return render(request, "blog/latest_post.html", {"posts": posts})
 
 #Calendar
 

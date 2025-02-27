@@ -15,4 +15,5 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     #Calendar
     path('calendar/', calendar_view, name='calendar'),
+    path("latest/", views.latest_post, name="latest"),
 ]

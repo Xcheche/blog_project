@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
    
     "django.contrib.admin",
     "django.contrib.auth",
@@ -43,15 +43,25 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Other apps
+   
+    
+     
+]
+PROJECT_APPS = [
      "blog",
      "users",
-     "sendgrid_backend",
+     "newsletter",
+]
+
+THIRD_PARTY_APPS = [
+    "sendgrid_backend",
     'crispy_forms',
     'crispy_bootstrap5',  # For Bootstrap 5
     'crispy_bootstrap4', 
     'captcha',
 ]
+
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 # Crispy forms
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5", "bootstrap4"

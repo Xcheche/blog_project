@@ -35,7 +35,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'False'  # Defaults to False if not set
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost",]  # Allow all hosts for development; restrict in production
+ALLOWED_HOSTS = ["blog-eoiw.onrender.com",]  # Allow all hosts for development; restrict in production
 
 
 # Application definition

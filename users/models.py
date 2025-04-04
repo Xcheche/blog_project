@@ -9,10 +9,10 @@ class Profile(models.Model):
     email = models.EmailField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True)
     bio = models.TextField(max_length=500, blank=True)
+    city = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(default="default.jpg",upload_to='images/', blank=True)
-    church = models.CharField(max_length=100, blank=True)
     
     
     

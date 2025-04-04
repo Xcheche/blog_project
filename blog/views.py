@@ -24,6 +24,15 @@ class PostListView(ListView):
     context_object_name = 'posts'
     ordering = ['-date_posted']
     paginate_by = 3
+    
+    
+    # Search logic
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q', '')  # Get the search query from the 'search' parameter
+        if search_query != '' and search_query is not None:
+            queryset = queryset.filter(title__icontains=search_query)  # Filter posts by title containing the search query
+        return queryset
 
 
 #All posts by a specific user

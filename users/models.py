@@ -12,6 +12,7 @@ class Profile(models.Model):
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     image = models.ImageField(default="default.jpg",upload_to='images/', blank=True)
+    church = models.CharField(max_length=100, blank=True)
     
     
     

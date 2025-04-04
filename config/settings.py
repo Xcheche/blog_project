@@ -16,6 +16,7 @@ from pathlib import Path
 from dotenv import load_dotenv  # type: ignore
 
 load_dotenv()
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6^guc6yf4^%is))ub2khmdvdm(!=sr9)jijsuu38^#=8x%gyam"
+SECRET_KEY = os.getenv('SECRET_KEY') 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'False'  # Defaults to False if not set
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost",]  # Allow all hosts for development; restrict in production
 
 
 # Application definition
@@ -59,6 +60,8 @@ THIRD_PARTY_APPS = [
     'crispy_bootstrap5',  # For Bootstrap 5
     'crispy_bootstrap4', 
     'captcha',
+    'gunicorn',
+    
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -73,6 +76,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"  # Set this as the default; you can switch t
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware", 
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -112,7 +116,9 @@ DATABASES = {
     }
 }
 
-
+# DATABASES = {
+#     "default":dj_database_url.config(default=os.getenv("DATABASE_URL"))
+# }
 # Password validation
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 
@@ -147,9 +153,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+
+# Define STATICFILES_DIRS only in development
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+# STATIC_ROOT for collecting static files in production
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# WhiteNoise for serving static files in production
+
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field

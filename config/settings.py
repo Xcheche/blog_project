@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import os
 from pathlib import Path
-import dj_database_url
+
 
 from dotenv import load_dotenv  # type: ignore
 
@@ -114,13 +114,29 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 
+# DATABASES ={
+#     'default':dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True  # Ensures SSL is required for the connection
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
+        'OPTIONS': {
+            'sslmode': os.getenv('DATABASE_SSLMODE', 'require'),  # Default to 'require' if not set
+        },
+    }
 }
+
+
+
+print("DATABASE_URL:", os.getenv("DATABASE_URL"))
+
 # Password validation
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 
@@ -176,8 +192,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-# Email settings for SendGrid
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" #fot testemail eg python manage.py sendtestemail checheomenife@gmail.com chukwuebuka.omenife@miva.edu
+
+# Email settings for SendGridEMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
 # Optional: For debugging purposes in development

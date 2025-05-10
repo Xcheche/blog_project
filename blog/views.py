@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 #Calendar
 import calendar
 from datetime import datetime
+from django.db.models import Q
 
 
 # Create your views here.
@@ -26,13 +27,33 @@ class PostListView(ListView):
     paginate_by = 3
     
     
-    # Search logic
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.GET.get('q', '')  # Get the search query from the 'search' parameter
-        if search_query != '' and search_query is not None:
-            queryset = queryset.filter(title__icontains=search_query)  # Filter posts by title containing the search query
-        return queryset
+    # # Search logic
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     search_query = self.request.GET.get('q', '')  # Get the search query from the 'search' parameter
+    #     if search_query != '' and search_query is not None:
+    #         queryset = queryset.filter(title__icontains=search_query)  # Filter posts by title containing the search query
+    #     return queryset
+
+
+
+#WIth htmx
+def search(request):
+    import time
+    time.sleep(2)  # Simulate a delay for the search
+    query = request.GET.get('q', '')
+    posts = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).order_by('-date_posted')
+    context = {
+        'posts': posts,
+        'query': query,
+    }
+    if not posts:
+        context['message'] = 'No posts found.'
+
+    return render(request, 'partials/post_list.html', context)
+
+
+
 
 
 #All posts by a specific user

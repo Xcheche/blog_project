@@ -16,4 +16,5 @@ urlpatterns = [
     #Calendar
     path('calendar/', calendar_view, name='calendar'),
     path("latest/", views.latest_post, name="latest"),
+    path("search/", views.search, name="search"),
 ]

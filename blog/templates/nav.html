@@ -25,15 +25,34 @@
           <a class="nav-item nav-link" href="{% url 'post-create' %}">Create New</a>
           {% if user.is_authenticated %}
            <!--SEarch-->
-              <form method="GET" action="" class="d-flex align-items-center">
-        <div class="search-container d-flex border rounded">
-            <span class="search-icon text-muted">
-                <i class="bi bi-search"></i>
-            </span>
-            <input type="text" name="q" class="form-control search-input border-0" placeholder="Search..." onfocus="expandSearch()" onblur="shrinkSearch()">
-        </div>
-     
-    </form>
+           <form method="GET" action="" class="d-flex align-items-center">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text text-muted">
+                        <i class="bi bi-search"></i>
+                    </span>
+                </div>
+                <!-- Search input field with HTMX integration -->
+                <input 
+                    type="text" 
+                    name="q" 
+                    class="form-control search-input" 
+                    placeholder="Search..." 
+                    onfocus="expandSearch()" 
+                    onblur="shrinkSearch()"
+                    hx-get="{% url 'search' %}"
+                    hx-trigger="keyup, delay:500ms"
+                    hx-target="#post_list"
+                    hx-indicator="#spinner"
+                    hx-on::before-request="document.getElementById('post_list').style.opacity=0.4; document.getElementById('spinner').style.display='flex';"
+                    hx-on::after-request="document.getElementById('post_list').style.opacity=1.0; document.getElementById('spinner').style.display='none';">
+            </div>
+        </form>
+        
+        <!-- Spinner placed in the center of the page -->
+        {% include 'partials/spinner.html' %}
+        
+        
            <!--End-->
           <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
           <form action="{% url 'logout' %}" method="post" class="d-inline">

@@ -35,12 +35,16 @@
 
     <title>{% block title %}Cheche blog{% endblock %}</title>
     <!--Splash-->
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="Cheche" />
-<link rel="manifest" href="/site.webmanifest" />
+    {% load static %}
+    <link rel="icon" type="image/png" href="{% static 'images/favicon-96x96.png' %}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}" />
+    <meta name="apple-mobile-web-app-title" content="Cheche" />
+    <link rel="manifest" href="{% static 'site.webmanifest' %}" />
+  
+
+    
 
 <!--Splash-->
    
@@ -106,5 +110,65 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
+
+    <!--Splash screen-->
+    <div id="splash" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:white;display:flex;justify-content:center;align-items:center;">
+      <!-- <img src="{% static 'images/favicon-96x96.png' %}" alt="Loading..." width="80"> -->
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <svg width="60" height="60" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="20" fill="#e9ecef"/>
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#888F92FF" stroke-width="4" stroke-linecap="round" stroke-dasharray="90 60">
+            <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        <div style="margin-top: 16px; font-size: 1.2rem; color: #8c9ca5; font-weight: 600; letter-spacing: 1px;">
+          Loading Cheche...
+        </div>
+      </div>
+    </div>
+
+    <!-- End Splash screen -->
+
+<!--js for splash-->    
+    <script>
+      // Show splash for at least 2 seconds, even if page loads fast
+      window.addEventListener('load', function () {
+      setTimeout(function () {
+        document.getElementById('splash').style.display = 'none';
+      }, 5000); // 2000ms = 2 seconds
+      });
+    </script>
+<!--End js for splash-->    
+
+
+
+
+
+<!--OPtional for service worker-->
+<script>
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/serviceworker.js').then(registration => {
+    console.log("Service Worker registered with scope:", registration.scope);
+
+    // Listen for updates to the service worker
+    registration.onupdatefound = () => {
+      const newWorker = registration.installing;
+      newWorker.onstatechange = () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // New update available
+          if (confirm('New version available! Refresh to update?')) {
+            window.location.reload();
+          }
+        }
+      };
+    };
+  }).catch(error => {
+    console.error("Service Worker registration failed:", error);
+  });
+}
+</script>
+
+
+
   </body>
 </html>

@@ -34,7 +34,7 @@
 
 
     <title>{% block title %}Cheche blog{% endblock %}</title>
-    <!--Splash-->
+    <!--for service worker Splash-->
     {% load static %}
     <link rel="icon" type="image/png" href="{% static 'images/favicon-96x96.png' %}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}" />
@@ -111,9 +111,11 @@
       crossorigin="anonymous"
     ></script>
 
-    <!--Splash screen-->
+    <!--Splash screen for desktop -->
     <div id="splash" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:white;display:flex;justify-content:center;align-items:center;">
-      <!-- <img src="{% static 'images/favicon-96x96.png' %}" alt="Loading..." width="80"> -->
+      <!-- <img src="{% static 'images/favicon-96x96.png' %}" alt="Loading..." width="80"> can use image -->
+
+
       <div style="display: flex; flex-direction: column; align-items: center;">
         <svg width="60" height="60" viewBox="0 0 50 50">
           <circle cx="25" cy="25" r="20" fill="#e9ecef"/>
@@ -121,15 +123,15 @@
             <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/>
           </circle>
         </svg>
-        <div style="margin-top: 16px; font-size: 1.2rem; color: #8c9ca5; font-weight: 600; letter-spacing: 1px;">
+        <div style="margin-top: 16px; font-size: 1.2rem; color: #8c9ca5; font-weight: 600; letter-spacing: 1px;"> <!--Twist color as desired--></div>
           Loading Cheche...
         </div>
       </div>
     </div>
 
-    <!-- End Splash screen -->
+    <!-- End Splash screen for desktop -->
 
-<!--js for splash-->    
+<!--js for desktop splash-->    
     <script>
       // Show splash for at least 2 seconds, even if page loads fast
       window.addEventListener('load', function () {
@@ -138,13 +140,13 @@
       }, 5000); // 2000ms = 2 seconds
       });
     </script>
-<!--End js for splash-->    
+<!--End js for desktop splash-->    
 
 
 
 
 
-<!--OPtional for service worker-->
+<!-- Registeration OPtional for service worker-->
 <script>
   if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/serviceworker.js').then(registration => {
@@ -167,6 +169,8 @@
   });
 }
 </script>
+
+<!--End of Registeration OPtional for service worker-->
 
 
 

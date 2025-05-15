@@ -24,49 +24,80 @@
 // });
 
 
-var staticCacheName = "djangopwa-v1";
+// serviceworker.js
 
-var filesToCache = [
-  "/", // Cache the homepage
+// Cache version - update this to force refresh of cache on new deploy
+const staticCacheName = "djangopwa-v2";
+
+// Files to cache - add all static assets your app needs offline
+const filesToCache = [
+  "/", // Cache homepage
   "/static/images/favicon.svg",
   "/static/images/favicon.ico",
   "/static/images/favicon-96x96.png",
   "/site.webmanifest",
   "/serviceworker.js",
-  // Add other static files you want to cache (CSS, JS, fonts, etc)
+  // Add other static assets like CSS, JS, fonts here if needed
 ];
 
-self.addEventListener("install", function (event) {
+// Install event - cache app shell files
+self.addEventListener("install", (event) => {
   console.log("[ServiceWorker] Install");
   event.waitUntil(
-    caches.open(staticCacheName).then(function (cache) {
+    caches.open(staticCacheName).then((cache) => {
       console.log("[ServiceWorker] Caching app shell");
       return cache.addAll(filesToCache);
+    }).then(() => {
+      // Activate this service worker immediately without waiting
+      return self.skipWaiting();
     })
   );
 });
 
-self.addEventListener("activate", function (event) {
+// Activate event - clean old caches and take control of clients ASAP
+self.addEventListener("activate", (event) => {
   console.log("[ServiceWorker] Activate");
   event.waitUntil(
-    caches.keys().then(function (keyList) {
+    // Delete old caches not matching current cache version
+    caches.keys().then((keyList) => {
       return Promise.all(
-        keyList.map(function (key) {
+        keyList.map((key) => {
           if (key !== staticCacheName) {
-            console.log("[ServiceWorker] Removing old cache", key);
+            console.log("[ServiceWorker] Removing old cache:", key);
             return caches.delete(key);
           }
         })
       );
+    }).then(() => {
+      // Take control of all clients immediately
+      return self.clients.claim();
     })
   );
 });
 
-self.addEventListener("fetch", function (event) {
-  console.log("[ServiceWorker] Fetch", event.request.url);
+// Fetch event - respond with cached content if available
+// Also fetch from network and update cache in background
+self.addEventListener("fetch", (event) => {
+  // Ignore non-GET requests (optional)
+  if (event.request.method !== "GET") {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then(function (response) {
-      return response || fetch(event.request);
+    caches.match(event.request).then((cachedResponse) => {
+      const fetchPromise = fetch(event.request).then((networkResponse) => {
+        // Update cache with fresh response for next time
+        return caches.open(staticCacheName).then((cache) => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+      }).catch(() => {
+        // If network fetch fails (offline), fallback to cached response
+        return cachedResponse;
+      });
+
+      // Return cached response immediately, or wait for network fetch
+      return cachedResponse || fetchPromise;
     })
   );
 });

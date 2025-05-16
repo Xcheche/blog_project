@@ -37,6 +37,7 @@ const filesToCache = [
   "/static/images/favicon-96x96.png",
   "/site.webmanifest",
   "/serviceworker.js",
+  "/static/offline.html",
   // Add other static assets like CSS, JS, fonts here if needed
 ];
 
@@ -77,27 +78,60 @@ self.addEventListener("activate", (event) => {
 
 // Fetch event - respond with cached content if available
 // Also fetch from network and update cache in background
+// self.addEventListener("fetch", (event) => {
+//   // Ignore non-GET requests (optional)
+//   if (event.request.method !== "GET") {
+//     return;
+//   }
+
+//   event.respondWith(
+//     caches.match(event.request).then((cachedResponse) => {
+//       const fetchPromise = fetch(event.request)
+//         .then((networkResponse) => {
+//           // Update cache with fresh response for next time
+//           return caches.open(staticCacheName).then((cache) => {
+//             cache.put(event.request, networkResponse.clone());
+//             return networkResponse;
+//           });
+//         })
+//         .catch(() => {
+//           // If network fetch fails (offline), fallback to cached response
+//           return cachedResponse;
+//         });
+//       // Show offline.html for navigation (HTML) pages
+//       if (event.request.headers.get("accept").includes("text/html")) {
+//         return caches.match("/static/offline.html");
+//       }
+
+//       // Return cached response immediately, or wait for network fetch
+//       return cachedResponse || fetchPromise;
+//     })
+//   );
+// });
 self.addEventListener("fetch", (event) => {
-  // Ignore non-GET requests (optional)
-  if (event.request.method !== "GET") {
-    return;
-  }
+  if (event.request.method !== "GET") return;
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        // Update cache with fresh response for next time
-        return caches.open(staticCacheName).then((cache) => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
+    fetch(event.request)
+      .then((response) => {
+        const responseClone = response.clone();
+        caches.open(staticCacheName).then((cache) => {
+          cache.put(event.request, responseClone);
         });
-      }).catch(() => {
-        // If network fetch fails (offline), fallback to cached response
-        return cachedResponse;
-      });
+        return response;
+      })
+      .catch(() => {
+        // Try cache first
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
 
-      // Return cached response immediately, or wait for network fetch
-      return cachedResponse || fetchPromise;
-    })
+          // Fallback to offline.html only for navigation requests (HTML pages)
+          if (event.request.headers.get("accept").includes("text/html")) {
+            return caches.match("/static/offline.html");
+          }
+        });
+      })
   );
 });

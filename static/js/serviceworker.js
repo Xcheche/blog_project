@@ -37,6 +37,7 @@ const filesToCache = [
   "/static/images/favicon-96x96.png",
   "/site.webmanifest",
   "/serviceworker.js",
+ 
   // Add other static assets like CSS, JS, fonts here if needed
 ];
 
@@ -85,16 +86,22 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        // Update cache with fresh response for next time
-        return caches.open(staticCacheName).then((cache) => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
+      const fetchPromise = fetch(event.request)
+        .then((networkResponse) => {
+          // Update cache with fresh response for next time
+          return caches.open(staticCacheName).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        })
+        .catch(() => {
+          // If network fetch fails (offline), fallback to cached response
+          return cachedResponse;
         });
-      }).catch(() => {
-        // If network fetch fails (offline), fallback to cached response
-        return cachedResponse;
-      });
+      // Show offline.html for navigation (HTML) pages
+      if (event.request.headers.get("accept").includes("text/html")) {
+        return caches.match("/static/offline.html");
+      }
 
       // Return cached response immediately, or wait for network fetch
       return cachedResponse || fetchPromise;

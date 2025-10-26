@@ -24,18 +24,6 @@ class SignUpForm(UserCreationForm):
         return email
 
 
-# Form for Updating user model
-# class UserUpdateForm(forms.ModelForm):
-
-#     class Meta:
-#         model = User
-#         fields = ['username', 'email']
-
-# # Form for Updating User Profile
-# class ProfileUpdateForm(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = ['phone', 'bio', 'location', 'birth_date', 'image']
 
 
 class UserUpdateForm(forms.ModelForm):

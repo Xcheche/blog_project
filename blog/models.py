@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 
+
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
@@ -11,13 +12,14 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
-        ordering = ['-date_posted']
+        ordering = ["-date_posted"]
         verbose_name_plural = "Posts"
-        
-        
+
     # get absolute url
-    
+
     def get_absolute_url(self):
-     return reverse('post-detail', kwargs={'pk': self.pk})  # Ensure 'post-detail' is correct here
+        return reverse(
+            "post-detail", kwargs={"pk": self.pk}
+        )  # Ensure 'post-detail' is correct here

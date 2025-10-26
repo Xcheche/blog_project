@@ -60,7 +60,9 @@
             <button type="submit" class="btn btn-link nav-item nav-link">→ Log Out</button>
           </form>
           {% else %}
+          <!--Login-->
           <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+          <!--Register-->
           <a class="nav-item nav-link" href="{% url 'signup' %}">Register</a>
           {% endif %}
         </div>

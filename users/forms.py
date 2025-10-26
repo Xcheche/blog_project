@@ -9,22 +9,24 @@ from .models import Profile
 # Form for extending signup
 class SignUpForm(UserCreationForm):
     captcha = CaptchaField()
-    
+
     email = forms.EmailField(required=True)
     forms.EmailField(required=True)
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ["username", "email", "password1", "password2"]
 
     def clean_email(self):
-        email = self.cleaned_data.get('email')
+        email = self.cleaned_data.get("email")
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email address is already in use.")
         return email
 
+
 # Form for Updating user model
 # class UserUpdateForm(forms.ModelForm):
-    
+
 #     class Meta:
 #         model = User
 #         fields = ['username', 'email']
@@ -35,23 +37,19 @@ class SignUpForm(UserCreationForm):
 #         model = Profile
 #         fields = ['phone', 'bio', 'location', 'birth_date', 'image']
 
+
 class UserUpdateForm(forms.ModelForm):
     # email = forms.EmailField()
 
     class Meta:
         model = User
-        fields = ['username']
+        fields = ["username"]
 
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone', 'bio', 'location', 'birth_date', 'image','email']
-
-
-
-
+        fields = ["phone", "bio", "location", "birth_date", "image", "email"]
 
 
 # class CustomLoginForm(AuthenticationForm):  # For login, not signup
-   

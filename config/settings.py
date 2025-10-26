@@ -17,10 +17,9 @@ from pathlib import Path
 from dotenv import load_dotenv  # type: ignore
 
 
-
 load_dotenv()
 
-#import dj_database_url
+# import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,10 +30,10 @@ PWA_SERVICE_WORKER = "static/js/serviceworker.js"
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY') 
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'False'  # Defaults to False if not set
+DEBUG = os.getenv("DEBUG", "True") == "False"  # Defaults to False if not set
 
 ALLOWED_HOSTS = ["*"]  # Allow all hosts for development; restrict in production
 
@@ -42,33 +41,27 @@ ALLOWED_HOSTS = ["*"]  # Allow all hosts for development; restrict in production
 # Application definition
 
 DJANGO_APPS = [
-   
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'pwa',
-   
-    
-     
+    "pwa",
 ]
 PROJECT_APPS = [
-     "blog",
-     "users",
-     "newsletter",
+    "blog",
+    "users",
+    "newsletter",
 ]
 
 THIRD_PARTY_APPS = [
     "sendgrid_backend",
-    'crispy_forms',
-    'crispy_bootstrap5',  # For Bootstrap 5
-    'crispy_bootstrap4', 
-    'captcha',
-    'gunicorn',
-    
-    
+    "crispy_forms",
+    "crispy_bootstrap5",  # For Bootstrap 5
+    "crispy_bootstrap4",
+    "captcha",
+    "gunicorn",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -76,14 +69,14 @@ INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5", "bootstrap4"
 
-CRISPY_TEMPLATE_PACK = "bootstrap5"  # Set this as the default; you can switch to "bootstrap4" if needed.
-
-
+CRISPY_TEMPLATE_PACK = (
+    "bootstrap5"  # Set this as the default; you can switch to "bootstrap4" if needed.
+)
 
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", 
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -105,7 +98,6 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            
         },
     },
 ]
@@ -119,23 +111,24 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # DATABASES ={
 #     'default':dj_database_url.config(default=os.getenv('DATABASE_URL'))
-    
+
 # }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.getenv('DATABASE_USER'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOST'),
-        'PORT': os.getenv('DATABASE_PORT'),
-        'OPTIONS': {
-            'sslmode': os.getenv('DATABASE_SSLMODE', 'require'),  # Default to 'require' if not set
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DATABASE_NAME"),
+        "USER": os.getenv("DATABASE_USER"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "HOST": os.getenv("DATABASE_HOST"),
+        "PORT": os.getenv("DATABASE_PORT"),
+        "OPTIONS": {
+            "sslmode": os.getenv(
+                "DATABASE_SSLMODE", "require"
+            ),  # Default to 'require' if not set
         },
     }
 }
-
 
 
 print("DATABASE_URL:", os.getenv("DATABASE_URL"))
@@ -174,7 +167,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 # Define STATICFILES_DIRS only in development
 if DEBUG:
@@ -188,81 +181,74 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" #fot testemail eg python manage.py sendtestemail checheomenife@gmail.com chukwuebuka.omenife@miva.edu
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" #fot testemail eg python manage.py sendtestemail checheomenife@gmail.com chukwuebuka.omenife@miva.edu
 
 # Email settings for SendGridEMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 
 # Optional: For debugging purposes in development
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False  # Set to True if you're testing without sending emails
+SENDGRID_SANDBOX_MODE_IN_DEBUG = (
+    False  # Set to True if you're testing without sending emails
+)
 
 # Optional: To track email status (useful for production)
 SENDGRID_TRACK_EMAIL_OPENS = True
 
 # Set default email address for sending
-DEFAULT_FROM_EMAIL = 'checheomenife@gmail.com'
+DEFAULT_FROM_EMAIL = "checheomenife@gmail.com"
 
 
+# Login redirect
+LOGIN_REDIRECT_URL = "/"
 
-# Login redirect 
-LOGIN_REDIRECT_URL = '/'
-
-LOGIN_URL = '/users/login/'
+LOGIN_URL = "/users/login/"
 
 
-#logger
+# logger
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
     },
 }
 
 
-#Pwa
-PWA_APP_NAME = 'Cheche'
+# Pwa
+PWA_APP_NAME = "Cheche"
 PWA_APP_DESCRIPTION = "Cheche's Blog  PWA"
-PWA_APP_THEME_COLOR = '#000000'
-PWA_APP_BACKGROUND_COLOR = '#ffffff'
-PWA_APP_DISPLAY = 'standalone'
-PWA_APP_SCOPE = '/'
-PWA_APP_ORIENTATION = 'any'
-PWA_APP_START_URL = '/'
-PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_THEME_COLOR = "#000000"
+PWA_APP_BACKGROUND_COLOR = "#ffffff"
+PWA_APP_DISPLAY = "standalone"
+PWA_APP_SCOPE = "/"
+PWA_APP_ORIENTATION = "any"
+PWA_APP_START_URL = "/"
+PWA_APP_STATUS_BAR_COLOR = "default"
 PWA_APP_ICONS = [
-    {
-        'src': '/static/images/favicon.svg',  # <-- add leading slash
-        'sizes': '160x160'
-    }
+    {"src": "/static/images/favicon.svg", "sizes": "160x160"}  # <-- add leading slash
 ]
-PWA_APP_ICONS_APPLE = [
-    {
-        'src': '/static/images/favicon.ico',
-        'sizes': '160x160'
-    }
-]
+PWA_APP_ICONS_APPLE = [{"src": "/static/images/favicon.ico", "sizes": "160x160"}]
 PWA_APP_SPLASH_SCREEN = [
     {
-        'src': '/static/images/favicon-96x96.png',
-        'sizes': '96x96',
-        'type': 'image/png',
-        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+        "src": "/static/images/favicon-96x96.png",
+        "sizes": "96x96",
+        "type": "image/png",
+        "media": "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
     }
 ]
 
-PWA_APP_DIR = 'ltr'
-PWA_APP_LANG = 'en-US'
+PWA_APP_DIR = "ltr"
+PWA_APP_LANG = "en-US"

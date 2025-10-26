@@ -21,11 +21,14 @@
     />
     <!--Boostrap js-->
     <!-- Bootstrap JS CDN -->
-    <script
+    <!-- <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
-    ></script>
+    ></script> -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!--Css-->
 <link rel="stylesheet" href="{% static 'blog/main.css' %}">
 <!--Htmx-->
@@ -65,10 +68,10 @@
       {% endfor %}
   {% endif %}
 </div> 
-
-
-
 <!--End of Django Messages-->
+
+
+
  <main role="main" class="container">
   <div class="row">
     {% include 'nav.html' %}
@@ -172,6 +175,13 @@
 
 <!--End of Registeration OPtional for service worker-->
 
+
+
+
+<!--for ajax-->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!--Importing the ajax script from static/js folder-->
+   <script src="{% static 'js/ajax.js' %}"></script>
 
 
   </body>

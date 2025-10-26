@@ -12,19 +12,15 @@ class Profile(models.Model):
     city = models.CharField(max_length=30, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    image = models.ImageField(default="default.jpg",upload_to='images/', blank=True)
-    
-    
-    
+    image = models.ImageField(default="default.jpg", upload_to="images/", blank=True)
+
     def __str__(self):
         return self.user.username
-    
-    
+
     class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
-        
- 
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
+
     # Resizing image automatically
     def save(self, *args, **kwargs):
         # Call the parent save method with all arguments
